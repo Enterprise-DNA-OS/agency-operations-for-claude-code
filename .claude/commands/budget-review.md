@@ -1,13 +1,13 @@
 ---
-description: Compliance for the agency operations desk
+description: Budget review for the agency operations desk
 ---
 
-# Compliance
+# Budget review
 
-Read docs/compliance.md. Report findings as evidence gaps, not a certification or legal conclusion. Internal review dates and scope gates are business policies.
+Hours include approved scope changes only. Compare recorded plus remaining effort with the agreed budget.
 
 ```bash
-node scripts/agency.mjs compliance
+node scripts/agency.mjs budget-review
 ```
 
 Substitute the operator's values for placeholders. Add --json for structured output. If a match is ambiguous, show the candidates and get an exact choice. Never invent records or send anything. See docs/cli.md for optional flags and rules.

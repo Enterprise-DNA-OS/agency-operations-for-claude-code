@@ -1,11 +1,70 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "project-status",
+    "title": "Project status and forecast",
+    "for_each": "select id,code from projects order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Engagement",
+        "sql": "select code,name,client,owner,kind,currency,start_on,due_on from project_health where id=$1"
+      },
+      {
+        "title": "Budget review",
+        "note": "Forecast contribution is not recognised profit. All figures exclude tax and overhead.",
+        "sql": "select agreed_fee,forecast_cost,forecast_contribution,budget_minutes,logged_minutes,remaining_minutes from project_health where id=$1"
+      },
+      {
+        "title": "Open delivery work",
+        "sql": "select name,due_on,remaining_minutes from tasks where project_id=$1 and status='open' order by due_on"
+      }
+    ]
+  },
+  {
+    "name": "scope-approval",
+    "title": "Draft scope change request",
+    "for_each": "select id,reference from changes where status='pending' order by reference",
+    "file": "reference",
+    "sections": [
+      {
+        "title": "Requested change",
+        "note": "Not approved. Obtain written client agreement before recording approval.",
+        "sql": "select p.code,c.reference,c.description,c.fee,p.currency,c.minutes,c.requested_by from changes c join projects p on p.id=c.project_id where c.id=$1"
+      }
+    ]
+  },
+  {
+    "name": "billing-worksheet",
+    "title": "Draft billing worksheet",
+    "for_each": "select id,code from projects order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Engagement basis",
+        "note": "Not a tax invoice. Reconcile with contract milestones or retainer terms in your accounting system.",
+        "sql": "select code,kind,currency,start_on,due_on,agreed_fee from project_health where id=$1"
+      },
+      {
+        "title": "Approved unbilled effort",
+        "note": "Effort value does not establish an amount payable. Nothing marked billed.",
+        "sql": "select t.worked_on,n.name,t.description,t.minutes,t.sell_rate,round(t.minutes*t.sell_rate/60,2) effort_value from time_entries t join people n on n.id=t.person_id where t.project_id=$1 and t.billable and t.approved_by is not null and t.billed_ref is null order by t.worked_on,t.id"
+      }
+    ]
+  },
+  {
+    "name": "retainer-statement",
+    "title": "Retainer usage statement",
+    "for_each": "select id,code from projects where kind='retainer' order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Period and usage",
+        "sql": "select code,start_on,due_on,budget_minutes,logged_minutes,greatest(0,logged_minutes-budget_minutes) overage_minutes from project_health where id=$1"
+      },
+      {
+        "title": "Recorded work",
+        "sql": "select worked_on,description,minutes,billable from time_entries where project_id=$1 order by worked_on,id"
+      }
     ]
   }
 ]

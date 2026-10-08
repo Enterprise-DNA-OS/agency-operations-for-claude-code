@@ -1,0 +1,9 @@
+{
+  "source_id": "Source ID",
+  "project": "Project",
+  "person": "User",
+  "date": "Date",
+  "duration": "Duration",
+  "description": "Description",
+  "billable": "Billable"
+}

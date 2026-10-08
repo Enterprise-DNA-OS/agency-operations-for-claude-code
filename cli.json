@@ -1,0 +1,175 @@
+{
+  "help": [],
+  "clients": [],
+  "people": [],
+  "projects": [],
+  "margin-review": [],
+  "budget-review": [],
+  "retainer-review": [],
+  "scope-review": [],
+  "time-review": [],
+  "unbilled": [],
+  "tasks-due": [],
+  "capacity-review": [],
+  "attention": [],
+  "compliance": [],
+  "activity": [],
+  "expenses": [],
+  "project": [
+    "project"
+  ],
+  "weekly-review": [],
+  "add-client": [
+    "name",
+    "contact",
+    "purpose",
+    "review"
+  ],
+  "set-client": [
+    "client",
+    "contact",
+    "purpose",
+    "review"
+  ],
+  "add-person": [
+    "name",
+    "currency",
+    "cost-rate",
+    "sell-rate",
+    "weekly-minutes"
+  ],
+  "add-project": [
+    "code",
+    "name",
+    "client",
+    "owner",
+    "currency",
+    "kind",
+    "start",
+    "due",
+    "fee",
+    "budget-minutes",
+    "evidence",
+    "actor"
+  ],
+  "set-project": [
+    "project",
+    "owner",
+    "due",
+    "evidence",
+    "actor"
+  ],
+  "add-task": [
+    "project",
+    "name",
+    "person",
+    "due",
+    "remaining-minutes",
+    "actor"
+  ],
+  "update-task": [
+    "project",
+    "task",
+    "remaining-minutes",
+    "status",
+    "due",
+    "actor"
+  ],
+  "log-time": [
+    "project",
+    "person",
+    "date",
+    "minutes",
+    "billable",
+    "description",
+    "actor"
+  ],
+  "approve-time": [
+    "project",
+    "entry",
+    "actor"
+  ],
+  "mark-billed": [
+    "project",
+    "entry",
+    "reference",
+    "evidence",
+    "actor"
+  ],
+  "add-expense": [
+    "project",
+    "reference",
+    "description",
+    "amount",
+    "date",
+    "year-end",
+    "retain-until",
+    "evidence",
+    "actor"
+  ],
+  "expense-evidence": [
+    "project",
+    "expense",
+    "evidence",
+    "actor"
+  ],
+  "request-change": [
+    "project",
+    "reference",
+    "description",
+    "fee",
+    "minutes",
+    "actor"
+  ],
+  "approve-change": [
+    "project",
+    "change",
+    "evidence",
+    "actor"
+  ],
+  "reject-change": [
+    "project",
+    "change",
+    "evidence",
+    "actor"
+  ],
+  "allocate": [
+    "project",
+    "person",
+    "week",
+    "minutes",
+    "actor"
+  ],
+  "leave": [
+    "person",
+    "week",
+    "minutes"
+  ],
+  "log": [
+    "project",
+    "actor",
+    "note"
+  ],
+  "close-project": [
+    "project",
+    "actor"
+  ],
+  "draft-chase": [
+    "project"
+  ],
+  "draft-billing": [
+    "project"
+  ],
+  "import": [
+    "file",
+    "map",
+    "source",
+    "actor",
+    "dry-run",
+    "duration-unit",
+    "date-format"
+  ],
+  "export": [
+    "out"
+  ]
+}

@@ -1,13 +1,32 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Agency Operations for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Agency weekly review",
+    "subtitle": "A read-only snapshot. Regenerate after changing records.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Decisions needed",
+        "sql": "select * from attention order by code"
+      },
+      {
+        "title": "Margin forecast",
+        "note": "Agreed fees less recorded costs and estimated remaining task costs. Excludes overhead and tax.",
+        "sql": "select code,currency,agreed_fee,forecast_cost,forecast_contribution from project_health order by code"
+      },
+      {
+        "title": "Capacity after leave",
+        "sql": "select * from capacity where week_on>=date_trunc('week',current_date)::date order by week_on,name"
+      }
+    ]
+  },
+  {
+    "name": "retainers",
+    "title": "Retainer period review",
+    "sections": [
+      {
+        "title": "Period usage",
+        "note": "Each retainer period is a separate project. Unused time does not roll forward automatically.",
+        "sql": "select code,start_on,due_on,budget_minutes,logged_minutes,greatest(0,logged_minutes-budget_minutes) overage_minutes from project_health where kind='retainer' order by due_on"
       }
     ]
   }

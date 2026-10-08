@@ -1,43 +1,60 @@
 # Agency Operations for Claude Code: operating instructions
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+One business's agency operations database. The fictional demo is Harbour Studio. Replace demo records and brand.json before real use. The operator owns the agency's commercial decisions.
 
-## Who this is for
+Read records before answering. Read the project and its history before changing it. Use names and values supplied by the operator. Ambiguous matches list candidates and exit 1. Never pick a person because their name appears first. Never send, pay, delete or silently approve records.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+Amounts are net and currencies remain separate. Forecast contribution excludes overhead and tax. Unbilled effort is not the amount due under a fixed fee or retainer. Written scope evidence precedes approval. Text actor names record attribution and are not authentication. Read docs/compliance.md and docs/replace-scoro.md before discussing those subjects.
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+## Recurring jobs
 
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Job | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| clients | /clients |
+| people | /people |
+| projects | /projects |
+| margin review | /margin-review |
+| budget review | /budget-review |
+| retainer review | /retainer-review |
+| scope review | /scope-review |
+| time review | /time-review |
+| unbilled | /unbilled |
+| tasks due | /tasks-due |
+| capacity review | /capacity-review |
+| attention | /attention |
+| compliance | /compliance |
+| activity | /activity |
+| expenses | /expenses |
+| project | /project |
+| weekly review | /weekly-review |
+| add client | /add-client |
+| set client | /set-client |
+| add person | /add-person |
+| add project | /add-project |
+| set project | /set-project |
+| add task | /add-task |
+| update task | /update-task |
+| log time | /log-time |
+| approve time | /approve-time |
+| mark billed | /mark-billed |
+| add expense | /add-expense |
+| expense evidence | /expense-evidence |
+| request change | /request-change |
+| approve change | /approve-change |
+| reject change | /reject-change |
+| allocate | /allocate |
+| leave | /leave |
+| log | /log |
+| close project | /close-project |
+| draft chase | /draft-chase |
+| draft billing | /draft-billing |
+| import | /import |
+| export | /export |
+| Change fields and policies | /customise |
+| Add a read-only report | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+The single CLI is scripts/agency.mjs. Run help or read docs/cli.md for flags. Every command accepts --json. The same recipes in .claude/commands work with Claude Code, Codex, OpenCode and Cursor. Migrations and seed are under supabase/. Run npm test after changes.
 
-## Hard rules
+Local PGlite supports one process. Postgres uses verified TLS and restricted owner access. Shared use requires authentication, authorisation and tested backups. Do not expose the owner connection to a browser. Store connection settings in the environment and never print them. Protect drafts, exports and rendered reports as operational data.
 
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off Scoro.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/scoro
+Omni by Enterprise DNA can install, customise and run this system. https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=scoro&utm_source=github&utm_medium=instructions

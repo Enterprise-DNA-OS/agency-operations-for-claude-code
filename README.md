@@ -1,115 +1,84 @@
-<h1 align="center">Agency Operations for Claude Code</h1>
+# Agency Operations for Claude Code
 
-<p align="center">
-  <strong>The open-source agency operations system that is just a database and Claude Code.</strong>
-</p>
+Know which project is consuming its fee, which retainer has used its hours and who is overbooked next week. An MIT-licensed database and command set for agency operations managers. Works with Claude Code, Codex, OpenCode or Cursor.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free. Try the demo, configure your rates and import work records. | Your scope rules, retainers, reports, Scoro data and a web front end or different stack if needed. | Installed, connected and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
+| [Quick start](#quick-start) | [Get your version built](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=scoro&utm_source=github&utm_medium=customise) | [Book a call](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=scoro&utm_source=github&utm_medium=managed) |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your Scoro data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=scoro">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/scoro?utm_source=github&utm_medium=readme&utm_campaign=scoro">How it works</a></td>
-  </tr>
-</table>
+## The weekly agency meeting
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-scoro">Instead of Scoro</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Agency Operations for Claude Code does the job you pay Scoro for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the Scoro dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays Scoro per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=scoro).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+Five jobs: review project contribution, get written scope approvals, check retainer usage, rebalance staff allocations and reconcile approved unbilled work. The fictional Harbour Studio demo includes an over-budget launch, unapproved extra formats, an exhausted retainer, an overloaded designer and missing expense evidence. Demo dates are relative to the first seed run. Reseeding preserves later changes.
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later, Windows or Linux:
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/agency-operations-for-claude-code.git
 cd agency-operations-for-claude-code
 npm install
 npm run demo
+npm test
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Open the directory in your coding agent and ask for the weekly review. The commands are in .claude/commands/, with AGENTS.md and CLAUDE.md pointing every runtime at the same files. There are 41 CLI commands and 42 slash recipes. See [all arguments and calculations](docs/cli.md).
 
-### Use it with your own Postgres or Supabase
+PGlite stores the demo under .data/db without a server. DATABASE_URL selects Postgres 15 or later with verified TLS. For real imports, select a fresh DATA_DIR, run npm run migrate without seed, and configure clients, staff rates and projects first. Do not put customer records into the demo database. The local database is single-process. A shared deployment needs authenticated operators, restricted database access and tested backups. Text actor names are attribution, not authentication. All data belongs to one business; there is no tenant switch.
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+## What the numbers mean
 
-## The commands
+- Agreed fee and hour budget include approved scope changes only. Pending requests stay separate.
+- Forecast cost adds recorded labour, expenses and each open task's remaining minutes at its assigned person's current cost rate. Forecast contribution excludes overhead and tax. It is not recognised profit or revenue.
+- Recorded time stores cost and sell rates at entry time. Changing a person's rate does not rewrite earlier work.
+- Unbilled effort includes reviewed, billable entries without an external invoice reference. On fixed-fee and retainer projects, this is effort value, not an amount payable.
+- Each retainer period is a separate project. Entries outside its dates are refused. Unused allowance does not roll forward automatically.
+- Weekly capacity subtracts recorded leave from each person's capacity, then subtracts allocations. Negative free minutes identify overbooking.
+- Currency stays on each project. Mixed-currency staff assignments are refused. Reports never sum different currencies.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+## Ten questions beyond a fixed report
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+Scoro already has detailed reporting, an assistant and an agent connection. These questions demonstrate this build's working queries, not an unsupported claim that Scoro cannot answer them.
 
-## Instead of scoro
+1. Which projects combine late tasks and unapproved scope? `attention`
+2. What contribution remains after recorded costs and estimated remaining work? `margin-review`
+3. How much requested scope is still outside the agreed fee? `scope-review`
+4. Which budgets are exceeded by completed and remaining hours together? `budget-review`
+5. Which retainer periods have used more than their allowance? `retainer-review`
+6. Who is overbooked after their recorded leave is deducted? `capacity-review`
+7. What reviewed work has no accounting invoice reference? `unbilled`
+8. Which expenses have no source-document reference? `compliance`
+9. Which active projects have had no recorded work for fourteen days? `attention`
+10. Who changed a project's scope or delivery records, and what was logged? `project`
 
-<!-- TODO(author): how to bring data across from Scoro; link docs/replace-scoro.md -->
+## Your first hour: ten things to ask for
 
-## Architecture
+1. Put our name, logo and colours on the paperwork.
+2. Show the decisions holding up delivery this week.
+3. Compare recorded cost with the cost still to come.
+4. Separate pending scope from the client's agreed fee.
+5. Show remaining retainer hours by period.
+6. Rebalance next week's designer allocations after leave.
+7. Draft a scope approval request for an owner to review.
+8. Test our work-report export before importing it.
+9. Add our service-line field through a new migration with /customise.
+10. Add a weekly client contribution snapshot with /new-view.
 
-```
-agency-operations-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
+## Documents and read-only views
 
-## Built for coding agents
+brand.json controls the business name, logo and colours. npm run docs renders project status sheets, scope approval requests, retainer statements and billing worksheets as printable HTML. npm run view renders the weekly meeting and retainer snapshots. Draft correspondence stays in drafts/. No command sends, charges a client or changes accounting records. Protect the output as private business data.
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+[Compliance checks](docs/compliance.md) cover missing expense evidence, privacy-review records and internal scope/time controls. They do not certify the business or replace accounting advice. [Why no front end](docs/why-no-front-end.md) explains the role of browser reports and what an interactive workspace adds.
 
-## Contributing
+## Move from Scoro
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+[The replacement guide](docs/replace-scoro.md) covers the supported CSV work-report import, column mapping, stable IDs, rate review and reconciliation. One import command loads completed work into configured projects. It does not silently recreate the whole Scoro account. Bring budgets, tasks, invoices, attachments and history outside that report through a separately agreed migration.
 
-## Want it installed and run for you?
+## Verification
 
-Enterprise DNA installs Agency Operations for Claude Code for your business, migrates your Scoro data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+npm test creates a temporary database and checks all 41 commands, seed idempotence, scope approvals, contribution calculations, historical rates, retainer dates, capacity after leave, billing controls, expense retention, repeat imports, whole-file rollback, CSV parsing, escaped HTML, drafts and exports. CI runs the same suite on Windows and Linux and against Postgres. TEST_DATABASE_URL accepts only an empty disposable database. See [research and selection](docs/research.md) for source evidence and its limits.
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=scoro)
-- Read more: [enterprisedna.co/omni/instead-of/scoro](https://enterprisedna.co/omni/instead-of/scoro?utm_source=github&utm_medium=readme&utm_campaign=scoro)
-
-## License
-
-MIT. Copyright (c) 2026 Enterprise DNA.
+MIT licence. Not affiliated with Scoro or Anthropic. Hosting and agent usage have separate costs. [Book 30 minutes with Sam](https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=scoro&utm_source=github&utm_medium=readme).
